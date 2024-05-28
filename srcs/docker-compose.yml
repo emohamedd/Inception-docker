@@ -2,18 +2,41 @@ services:
   nginx:
     build: requirements/nginx/.
     container_name: nginx
+    # depends_on:
+    #   - wordpress
     ports:
       - "80:80"
     restart: always
     volumes:
       - ./web:/var/www/html
-  wordpress:
-    build: requirements/wordpress/.
-    container_name: wp-php
-    restart: always
-    volumes:
-      - ./web:/var/www/html
-  mariadb:
-    build: requirements/mariadb/.
-    container_name: mariadb
-    restart: always
+  # mariadb:
+  #   build: requirements/mariadb/.
+  #   ports:
+  #     - "3260:3260"
+  #   volumes:
+  #     - ./db:/var/lib/mysql
+  #   environment:
+  #     - MARIADB_ROOT_PASSWORD=2109
+  #   healthcheck:
+  #     test: ["CMD", "mysqladmin", "ping", "-uroot", "-p${MARIADB_ROOT_PASSWORD}"]
+  #     interval: 30s
+  #     timeout: 30s
+  #     retries: 3
+  # wordpress:
+  #   build: requirements/wordpress/.
+  #   # image : wordpress:5.2.2
+  #   ports:
+  #     - "8080:80"
+  #   volumes:
+  #     - ./web:/var/www/html
+  #   environment:
+  #     - WORDPRESS_DB_PASSWORD=2109
+  #   depends_on:
+  #     - mariadb
+  #   links:
+  #     - mariadb
+
+# volumes:
+#   db:
+#   web:
+
