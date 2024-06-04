@@ -1,10 +1,13 @@
 FROM debian:latest
 
-RUN apt-get update && apt-get update && apt-get install -y mariadb-server
+RUN apt-get update && apt-get install -y mariadb-server
 
-COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/.
-COPY ./tools/init.sql /docker-entrypoint-initdb.d/.
+RUN mkdir -p /var/run/mysqld && chown -R mysql:mysql /var/run/mysqld && chmod 777 /var/run/mysqld
 
-RUN mkdir /run/mysqld
+COPY ./tools/init.sh /home
 
-CMD /bin/sh -c "service mysql start && mysql < /docker-entrypoint-initdb.d/init.sql && /bin/bash"
+RUN chmod 777 /home/init.sh
+
+ENTRYPOINT [ "sh", "/home/init.sh"]
+
+CMD ["mariadbd", "--user=mysql", "--bind-address=0.0.0.0"]

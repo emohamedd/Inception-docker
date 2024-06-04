@@ -1,42 +1,44 @@
 services:
+  mariadb:
+    build: requirements/mariadb/.
+    container_name: mariadb
+    restart: always
+    environment:
+      - ./.env
+    volumes:
+      - mariadb:/var/lib/mysql
+    networks:
+      - inception
+    
+  wordpress:
+    build: requirements/wordpress/.
+    container_name: wordpress
+    depends_on:
+      - mariadb
+    env_file:
+      - ./.env
+    volumes:
+      - wordpress:/var/www/html/wordpress
+    networks:
+      - inception
+    
   nginx:
     build: requirements/nginx/.
     container_name: nginx
-    # depends_on:
-    #   - wordpress
-    ports:
-      - "80:80"
-    restart: always
+    depends_on:
+      - mariadb
+      - wordpress
     volumes:
-      - ./web:/var/www/html
-  # mariadb:
-  #   build: requirements/mariadb/.
-  #   ports:
-  #     - "3260:3260"
-  #   volumes:
-  #     - ./db:/var/lib/mysql
-  #   environment:
-  #     - MARIADB_ROOT_PASSWORD=2109
-  #   healthcheck:
-  #     test: ["CMD", "mysqladmin", "ping", "-uroot", "-p${MARIADB_ROOT_PASSWORD}"]
-  #     interval: 30s
-  #     timeout: 30s
-  #     retries: 3
-  # wordpress:
-  #   build: requirements/wordpress/.
-  #   # image : wordpress:5.2.2
-  #   ports:
-  #     - "8080:80"
-  #   volumes:
-  #     - ./web:/var/www/html
-  #   environment:
-  #     - WORDPRESS_DB_PASSWORD=2109
-  #   depends_on:
-  #     - mariadb
-  #   links:
-  #     - mariadb
+      - wordpress:/var/www/html/wordpress
+    ports:
+      - "443:443"
+    networks:
+      - inception
 
-# volumes:
-#   db:
-#   web:
+networks:
+  inception:
+    driver: bridge
 
+volumes:
+  mariadb:
+  wordpress:

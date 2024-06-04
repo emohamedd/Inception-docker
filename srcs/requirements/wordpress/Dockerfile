@@ -1,7 +1,16 @@
-FROM debian:12
+FROM debian:latest
 
-RUN apt-get update && apt-get install -y php-fpm  php8.2-fpm
+RUN apt-get update && apt-get install -y php-mysql
 
-COPY www.conf /etc/php/8.2/fpm/pool.d/.
+RUN apt-get update && \
+    apt-get install -y php8.2-cli \
+    php8.2 \
+    php8.2-fpm \
+    php8.2-mysql \
+    curl 
 
-CMD ["php-fpm8.2", "-F"]
+COPY ./tools/init_wp.sh .
+
+RUN chmod 777 init_wp.sh
+
+CMD [ "sh", "init_wp.sh" ]
