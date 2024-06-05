@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 echo "FLUSH PRIVILEGES;" > init.sql
 echo "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;" >> init.sql

@@ -11,6 +11,6 @@ RUN apt-get update && \
 
 COPY ./tools/init_wp.sh .
 
-RUN chmod 777 init_wp.sh
+RUN chmod +x init_wp.sh
 
 CMD [ "sh", "init_wp.sh" ]
