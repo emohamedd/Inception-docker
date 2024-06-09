@@ -1,13 +1,19 @@
 FROM debian:latest
 
-RUN apt-get update && apt-get install -y mariadb-server
+RUN apt-get update && apt-get install -y mariadb-server nano
 
-RUN mkdir -p /var/run/mysqld && chown -R mysql:mysql /var/run/mysqld && chmod 777 /var/run/mysqld
+RUN mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld
 
-COPY ./tools/init.sh .
+RUN chown -R mysql:mysql /var/lib/mysql
 
-RUN chmod +x init.sh
+RUN mysql_install_db --user=mysql --ldata=/var/lib/mysql
 
-# ENTRYPOINT [ "sh", "init.sh"]
-CMD ["yes"]
-# CMD ["mariadbd", "--user=mysql", "--bind-address=0.0.0.0"]
+COPY tools/init.sh /home
+
+RUN chmod +x /home/init.sh
+
+ENTRYPOINT ["sh", "/home/init.sh"]
+
+EXPOSE 3306
+
+CMD ["mariadbd", "--user=mysql", "--bind-address=0.0.0.0"]

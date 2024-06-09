@@ -3,12 +3,12 @@ FROM debian:latest
 RUN apt-get update && apt-get upgrade -y && apt-get install -y nginx openssl
 
 
-COPY ./conf/default.conf /etc/nginx/nginx.conf
+COPY ./conf/default.conf /etc/nginx/conf.d/default.conf
 
-RUN mkdir /etc/nginx/ssl && \
-    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -keyout /etc/nginx/ssl/emohamed.key \
-    -out /etc/nginx/ssl/emohamed.crt  \
-    -subj "/C=MA/L=Tetouan/O=42/OU=1337 MED/CN=emohamed.42.fr"
+COPY tools/cert.pem /etc/nginx/cert/server.pem
+COPY tools/key.pem /etc/nginx/private/server.pem
+
+EXPOSE 443
 
 CMD ["nginx", "-g", "daemon off;"]
+
