@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "FLUSH PRIVILEGES;" >> data.sql
 # create a database if it doesn't exist, and append it to the data.sql file
 echo "CREATE DATABASE IF NOT EXISTS $MARIADB_DATABASE;" >> data.sql
