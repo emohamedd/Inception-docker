@@ -1,5 +1,16 @@
-all: run
-	docker-compose -f ./srcs/docker-compose.yml up  --build
+all: banner run
+	docker-compose -f ./srcs/docker-compose.yml up -d  --build
+
+banner :
+		@echo "\033[1;33m"
+		@echo "██╗ ███╗   ██╗ ██████╗███████╗██████╗ ████████╗██╗  ██████╗ ███╗   ██╗"
+		@echo "██║ ████╗  ██║██╔════╝██╔════╝██╔══██╗╚══██╔══╝██║ ██╔═══██╗████╗  ██║"
+		@echo "██║ ██╔██╗ ██║██║     █████╗  ██████╔╝   ██║   ██║ ██║   ██║██╔██╗ ██║"
+		@echo "██║ ██║╚██╗██║██║     ██╔══╝  ██╔═══╝    ██║   ██║ ██║   ██║██║╚██╗██║"
+		@echo "██║ ██║ ╚████║╚██████╗███████╗██║        ██║   ██║ ╚██████╔╝██║ ╚████║"
+		@echo "╚═╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═╝        ╚═╝   ╚═╝  ╚═════╝ ╚═╝  ╚═══╝"
+		@echo "							  By: emohamed"
+		@echo "\033[0m"
 
 run :
 	bash ./srcs/requirements/tools/init.sh
